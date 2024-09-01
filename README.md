@@ -17,7 +17,54 @@
  SPDX-License-Identifier: Apache-2.0 WITH SHL-2.0
 
 -->
+# ISOLDE
 
+Everything in the root folder.
+1. Checkout the repository and initialize all submodules.
+```sh
+git clone https://github.com/ISOLDE-Project/core-v-verif.git
+cd core-v-verif
+git submodule update --init --recursive
+```
+2. Setup the environment  
+2a. Initial setup  
+The recommended toolchain, see [here](https://github.com/openhwgroup/core-v-verif/blob/master/mk/TOOLCHAIN.md) for all CORE-V cores is available from Embecosm
+[here](https://www.embecosm.com/resources/tool-chain-downloads/#corev). Unpack the tar.gz file to **/path/to/toolchain/installation/directory**. In **tools** folder, create a symbolic link to save (some) hard disk space
+```
+ mkdir -p install 
+ ln -s /path/to/toolchain/installation/directory install/corev-openhw-gcc
+```
+Configure Python env, install verilator:
+```sh
+. ./setup.sh
+```
+2b.
+```sh
+. ./eth.sh
+```
+## cv32e40p simulation
+```sh
+cd cv32e40p/sim/core
+make 
+```
+Result:  
+```
+[tb_top_verilator] finished dumping memory
+
+HELLO WORLD!!!
+This is the OpenHW Group CV32E40P CORE-V processor core.
+CV32E40P is a RISC-V ISA compliant core with the following attributes:
+        mvendorid = 0x602
+        marchid   = 0x4
+        mimpid    = 0x0
+        misa      = 0x40001104
+        XLEN is 32-bits
+        Supported Instructions Extensions: MIC
+
+TOP.tb_top_verilator @ 130110: EXIT SUCCESS
+- /home/uic52463/hdd1/tristan-project/core-v-verif/cv32e40p/tb/core/tb_top_verilator.sv:83: Verilog $finish
+make[1]: Leaving directory '/home/uic52463/hdd1/tristan-project/core-v-verif/cv32e40p/sim/core'
+```
 # core-v-verif
 Functional verification project for the CORE-V family of RISC-V cores.
 

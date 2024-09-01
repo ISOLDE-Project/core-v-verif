@@ -474,10 +474,14 @@ xrun-clean-all: xrun-clean
 # the --trace flags to the verilator call
 #ifeq ($(findstring +vcd,$(VERI_FLAGS)),+vcd)
 
+VLT_FLAGS    += -Wno-fatal
+VLT_CFLAGS   += -std=c++17 
+
 ifneq (${WAVES}, 0)
 VERI_TRACE="--trace"
-VERI_CFLAGS+="-DVCD_TRACE"
+VLT_CFLAGS  += -DVCD_TRACE
 endif
+
 
 verilate: testbench_verilator
 
@@ -490,13 +494,14 @@ testbench_verilator: CV_CORE_pkg $(TBSRC_VERI) $(TBSRC_PKG)
 	@echo "$(BANNER)"
 	$(VERILATOR) --cc --sv --exe \
 		$(VERI_TRACE) \
+		$(VLT_FLAGS)   \
 		--Wno-lint --Wno-UNOPTFLAT \
 		--Wno-MODDUP --top-module \
 		tb_top_verilator $(TBSRC_VERI) \
 		-f $(CV_CORE_MANIFEST) \
 		$(CV_CORE_PKG)/bhv/$(CV_CORE_LC)_core_log.sv \
 		$(TBSRC_CORE)/tb_top_verilator.cpp --Mdir $(VERI_OBJ_DIR) \
-		-CFLAGS "-std=gnu++11 $(VERI_CFLAGS)" \
+		-CFLAGS "$(VLT_CFLAGS)"  \
 		$(VERI_COMPILE_FLAGS)
 	$(MAKE) -C $(VERI_OBJ_DIR) -f Vtb_top_verilator.mk
 	mkdir -p $(SIM_RESULTS)
